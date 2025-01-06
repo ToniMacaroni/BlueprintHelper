@@ -403,8 +403,8 @@ class SetupCollision(bpy.types.Operator):
             if obj.type != 'MESH':
                 continue
             
-            if not obj.name.startswith("collision"):
-                obj.name = "collision." + obj.name
+            if not obj.name.startswith("collider"):
+                obj.name = "collider." + obj.name
             obj.display_type = 'BOUNDS'
 
         return {'FINISHED'}
