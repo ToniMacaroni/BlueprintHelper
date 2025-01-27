@@ -430,9 +430,11 @@ class ItemIDPanel(bpy.types.Panel):
             layout.label(text = "Select a mesh")
             return
         
-        layout.label(text = "Active Object")
-        layout.prop(active_object.data, "ItemId")
-        layout.separator()
+        row = layout.row()
+        row.enabled = False
+        row.label(text = "Active Object")
+        row.prop(active_object.data, "ItemId")
+        row.separator()
         
         layout.label(text = "Apply to objects")
         layout.prop(context.scene, "item_id_enum", text="Item")
@@ -447,13 +449,18 @@ class ItemIDPanel(bpy.types.Panel):
         layout.separator()
 
         layout.label(text = "Export")
-        layout.operator("export_scene.gltf", text="Export")
+        layout.prop(context.scene, "bphelper_only_selected", text="Only Export Selected")
+        exop = layout.operator("export_scene.gltf", text="Export")
+        exop.export_extras = True
+        exop.use_selection = context.scene.bphelper_only_selected
+        
 
 
 def register():
     bpy.types.Mesh.ItemId = bpy.props.IntProperty(name="Item ID", default=0)
     bpy.types.Scene.item_id_enum = item_id_enum
     bpy.types.Scene.item_id = bpy.props.IntProperty(name="Item ID", default=0)
+    bpy.types.Scene.bphelper_only_selected = bpy.props.BoolProperty(name="Only Export Selected", default=True)
     bpy.utils.register_class(SetItemID)
     bpy.utils.register_class(ItemIDPanel)
     bpy.utils.register_class(SearchMyEnum)
